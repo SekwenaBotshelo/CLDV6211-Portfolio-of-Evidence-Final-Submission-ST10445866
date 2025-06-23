@@ -1,0 +1,55 @@
+﻿@model IEnumerable<EventEaseApp.ViewModel.BookingSearchResultVM>
+
+@{
+    ViewBag.Title = "Manage Bookings";
+}
+
+<h2>Manage Bookings</h2>
+
+<!-- 🔍 Search Form -->
+@using (Html.BeginForm("ManageBookings", "Bookings", FormMethod.Get))
+{
+    <div class="form-inline mb-3">
+        <label for="searchTerm">Search:</label>
+        <input type="text" name="searchTerm" class="form-control mx-2" placeholder="Event name or venue..." />
+
+        <label for="bookingId">Booking ID:</label>
+        <input type="number" name="bookingId" class="form-control mx-2" placeholder="e.g. 101" />
+
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Event Name</th>
+            <th>Event Date</th>
+            <th>Venue Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Booking Start</th>
+            <th>Booking End</th>
+            <th>Duration (hrs)</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.BookingID</td>
+                <td>@booking.EventName</td>
+                <td>@booking.EventDate.ToString("yyyy-MM-dd")</td>
+                <td>@booking.VenueName</td>
+                <td>@booking.VenueLocation</td>
+                <td>@booking.VenueCapacity</td>
+                <td>@booking.BookingStart.ToString("g")</td>
+                <td>@booking.BookingEnd.ToString("g")</td>
+                <td>@booking.DurationHours</td>
+                <td>@booking.BookingStatus</td>
+            </tr>
+        }
+    </tbody>
+</table>

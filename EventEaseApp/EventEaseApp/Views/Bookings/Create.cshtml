@@ -1,0 +1,85 @@
+﻿@model EventEaseApp.Models.BookingViewModel
+
+@{
+    ViewBag.Title = "Create Booking";
+}
+
+<h2>Create Booking</h2>
+
+<!-- Display any validation errors -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @Html.ValidationSummary(false, "", new { @class = "m-0" })
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <!-- Venue Dropdown -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Booking.VenueID, "Venue")
+        @Html.DropDownListFor(model => model.Booking.VenueID,
+            new SelectList(Model.Venues, "VenueID", "Name"),
+            "Select Venue",
+            new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.Booking.VenueID, "", new { @class = "text-danger small" })
+    </div>
+
+    <!-- Event Dropdown -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Booking.EventID, "Event")
+        @Html.DropDownListFor(model => model.Booking.EventID,
+            new SelectList(Model.Events, "EventID", "Name"),
+            "Select Event",
+            new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.Booking.EventID, "", new { @class = "text-danger small" })
+    </div>
+
+    <!-- Start Date -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Booking.StartDate)
+        @Html.TextBoxFor(model => model.Booking.StartDate,
+            "{0:yyyy-MM-ddTHH:mm}",
+            new { @class = "form-control", type = "datetime-local", required = "required" })
+        @Html.ValidationMessageFor(model => model.Booking.StartDate, "", new { @class = "text-danger small" })
+    </div>
+
+    <!-- End Date -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Booking.EndDate)
+        @Html.TextBoxFor(model => model.Booking.EndDate,
+            "{0:yyyy-MM-ddTHH:mm}",
+            new { @class = "form-control", type = "datetime-local", required = "required" })
+        @Html.ValidationMessageFor(model => model.Booking.EndDate, "", new { @class = "text-danger small" })
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Create Booking
+        </button>
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary ml-2" })
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        // Enable client-side validation
+        $(document).ready(function () {
+            $("form").validate();
+
+            // Auto-close alerts after 5 seconds
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 5000);
+        });
+    </script>
+}

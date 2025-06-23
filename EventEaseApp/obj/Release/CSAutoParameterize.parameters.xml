@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="PortfolioOfEvidencePOneDBContext-Web.config Connection String" description="PortfolioOfEvidencePOneDBContext Connection String used in web.config by the application to access the database." defaultValue="data source=lab7L95SR\SQLEXPRESS;initial catalog=PortfolioOfEvidencePOneDB;integrated security=True;trustservercertificate=True;MultipleActiveResultSets=True;App=EntityFramework" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\lab_services_student\\Desktop\\CLDV6211\\CLDV6211\ POE\ Part\ 1\\New\\EventEaseApp\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='PortfolioOfEvidencePOneDBContext']/@connectionString" />
+  </parameter>
+</parameters>

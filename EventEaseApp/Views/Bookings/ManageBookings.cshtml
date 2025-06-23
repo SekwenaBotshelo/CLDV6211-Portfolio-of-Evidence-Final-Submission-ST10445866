@@ -1,0 +1,84 @@
+﻿@model IEnumerable<EventEaseApp.ViewModel.BookingSearchResultVM>
+
+@{
+    ViewBag.Title = "Booking Insights";
+}
+
+<h2>Booking Insights</h2>
+
+<!-- 🔍 Search Form -->
+@using (Html.BeginForm("ManageBookings", "Bookings", FormMethod.Get))
+{
+    <div class="form-inline mb-3">
+        <label for="searchTerm">Search:</label>
+        <input type="text" name="searchTerm" value="@Request["searchTerm"]" class="form-control mx-2" placeholder="Event or Venue..." />
+
+        <label for="bookingId">Booking ID:</label>
+        <input type="number" name="bookingId" value="@Request["bookingId"]" class="form-control mx-2" placeholder="e.g. 101" />
+
+        <label for="eventTypeID">Event Type:</label>
+        @Html.DropDownList("eventTypeID", (SelectList)ViewBag.EventTypes, "All Types", new { @class = "form-control mx-2", id = "eventTypeID" })
+
+        <label for="dateFrom">Date From:</label>
+        <input type="date" name="dateFrom" value="@Request["dateFrom"]" class="form-control mx-2" />
+
+        <label for="dateTo">Date To:</label>
+        <input type="date" name="dateTo" value="@Request["dateTo"]" class="form-control mx-2" />
+
+        <label for="venueAvailableOnly">Venue Availability:</label>
+        <select name="venueAvailableOnly" id="venueAvailableOnly" class="form-control mx-2">
+            <option value="" @(String.IsNullOrEmpty(Request["venueAvailableOnly"]) ? "selected" : "")>All</option>
+            <option value="true" @(Request["venueAvailableOnly"] == "true" ? "selected" : "")>Available</option>
+            <option value="false" @(Request["venueAvailableOnly"] == "false" ? "selected" : "")>Not Available</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+
+        <a href="@Url.Action("ManageBookings", "Bookings")" class="btn btn-secondary">Clear Filters</a>
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Available?</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Hours</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.BookingID</td>
+                    <td>@b.EventName</td>
+                    <td>@b.EventTypeName</td>
+                    <td>@b.EventDate.ToString("yyyy-MM-dd")</td>
+                    <td>@b.VenueName</td>
+                    <td>@(b.IsAvailable ? "Yes" : "No")</td>
+                    <td>@b.VenueLocation</td>
+                    <td>@b.VenueCapacity</td>
+                    <td>@b.BookingStart.ToString("g")</td>
+                    <td>@b.BookingEnd.ToString("g")</td>
+                    <td>@b.DurationHours</td>
+                    <td>@b.BookingStatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No bookings found matching your criteria.</div>
+}
