@@ -1,0 +1,51 @@
+-- ========================================
+-- 5.1 CREATING THE EventTypes LOOKUP TABLE
+-- ========================================
+
+-- Table: EventType
+CREATE TABLE EventTypes (
+	EventTypeID INT PRIMARY KEY IDENTITY(1, 1),
+	TypeName NVARCHAR(100) NOT NULL
+);
+
+-- =================================
+-- 5.2 INSERT PREDEFINED EVENT TYPES 
+-- =================================
+INSERT INTO EventTypes (TypeName)
+VALUES	('Conference'),
+		('Wedding'),
+		('Concert'),
+		('Workshop'),
+		('Birthday Party'),
+		('Other')
+
+-- ==================================================
+-- 5.3 ADDING EventTypeID FOREIGN KEY TO Events TABLE
+-- ==================================================
+ALTER TABLE Events
+ADD EventTypeID INT;
+
+ALTER TABLE Events
+ADD CONSTRAINT FK_Events_EventTypes
+	FOREIGN KEY (EventTypeID) REFERENCES EventTypes(EventTypeID)
+	ON DELETE SET NULL;
+
+-- ==================================================
+-- 5.4 ADDING IsAvailable FIELD TO Venues TABLE
+-- ==================================================
+ALTER TABLE Venues
+ADD IsAvailable BIT NOT NULL DEFAULT 1;
+
+-- ======================
+-- 6. UPDATE SAMPLE DATA
+-- ======================
+-- Updating Events To Include EventType
+UPDATE Events SET EventTypeID = 1 WHERE Name = 'Corporate Year-End Function'; -- Conference
+UPDATE Events SET EventTypeID = 2 WHERE Name = 'Wedding Celebration';         -- Wedding
+UPDATE Events SET EventTypeID = 3 WHERE Name = 'Product Launch Party';        -- Concert
+
+SELECT * FROM Events WHERE Name LIKE '%Wedding%';
+
+UPDATE Events
+SET EventTypeID = 2
+WHERE Name LIKE '%Wedding Celebration%';

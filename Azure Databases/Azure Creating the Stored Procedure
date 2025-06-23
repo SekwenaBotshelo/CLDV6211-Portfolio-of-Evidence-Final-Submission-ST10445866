@@ -1,0 +1,63 @@
+-- ============================================================================================================
+-- ====================================
+-- 4. CREATING THE STORED PROCEDURE
+-- ====================================
+
+-- Creating the Stored Procedure for the view: (vw_BookingManagement)
+
+CREATE OR ALTER PROCEDURE sp_SearchBookings
+    @SearchTerm NVARCHAR(100) = NULL,
+    @BookingID INT = NULL,
+    @EventName NVARCHAR(100) = NULL,
+    @DateFrom DATETIME = NULL,
+    @DateTo DATETIME = NULL,
+	-- The addition of the EventTypes
+	@EventTypeID INT = NULL,
+	@VenueAvailabilityOnly BIT = NULL
+AS
+BEGIN
+    SELECT * FROM vw_BookingManagement
+    WHERE 
+        (@SearchTerm IS NULL OR 
+         EventName LIKE '%' + @SearchTerm + '%' OR 
+         VenueName LIKE '%' + @SearchTerm + '%')
+        AND (@BookingID IS NULL OR BookingID = @BookingID)
+        AND (@EventName IS NULL OR EventName LIKE '%' + @EventName + '%')
+        AND (@DateFrom IS NULL OR BookingStart >= @DateFrom)
+        AND (@DateTo IS NULL OR BookingEnd <= @DateTo)
+		-- The addition of the EventTypes
+		AND (@EventTypeID IS NULL OR EventTypeID = @EventTypeID)
+		AND (@VenueAvailabilityOnly IS NULL OR IsAvailable = @VenueAvailabilityOnly)
+    ORDER BY BookingStart DESC;
+END
+GO
+
+-- UPDATE TO THE Procedure
+DROP PROCEDURE IF EXISTS sp_SearchBookings;
+GO
+
+CREATE PROCEDURE sp_SearchBookings
+    @SearchTerm NVARCHAR(100) = NULL,
+    @BookingID INT = NULL,
+    @EventName NVARCHAR(100) = NULL,
+    @DateFrom DATETIME = NULL,
+    @DateTo DATETIME = NULL,
+    @EventTypeID INT = NULL,
+    @VenueAvailableOnly BIT = NULL
+AS
+BEGIN
+    SELECT * FROM vw_BookingManagement
+    WHERE 
+        (@SearchTerm IS NULL OR 
+         EventName LIKE '%' + @SearchTerm + '%' OR 
+         VenueName LIKE '%' + @SearchTerm + '%')
+        AND (@BookingID IS NULL OR BookingID = @BookingID)
+        AND (@EventName IS NULL OR EventName LIKE '%' + @EventName + '%')
+        AND (@DateFrom IS NULL OR BookingStart >= @DateFrom)
+        AND (@DateTo IS NULL OR BookingEnd <= @DateTo)
+        AND (@EventTypeID IS NULL OR EventTypeID = @EventTypeID)
+        AND (@VenueAvailableOnly IS NULL OR IsAvailable = @VenueAvailableOnly)
+    ORDER BY BookingStart DESC;
+END;
+GO
+-- ============================================================================================================
